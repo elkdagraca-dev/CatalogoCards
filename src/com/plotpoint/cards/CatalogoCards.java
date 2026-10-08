@@ -945,3 +945,206 @@ public class CatalogoCards extends AndroidViewComponent {
         }
                     }
         
+    // ============================================================
+    // CARREGA IMAGEM
+    // ============================================================
+
+    private void carregarImagem(
+            final ImageView imageView,
+            final String url,
+            final int posicao
+    ) {
+
+        // --------------------------------------------------------
+        // URL vazia
+        // --------------------------------------------------------
+
+        if (url == null ||
+                url.trim().isEmpty()) {
+
+            ImagemFalhou(
+                    posicao,
+                    url == null ? "" : url
+            );
+
+            return;
+        }
+
+        final String urlFinal =
+                url.trim();
+
+        // --------------------------------------------------------
+        // Verifica primeiro o cache.
+        // --------------------------------------------------------
+
+        Bitmap imagemCache =
+                imageCache.get(
+                        urlFinal
+                );
+
+        if (imagemCache != null) {
+
+            imageView.setImageBitmap(
+                    imagemCache
+            );
+
+            ImagemCarregada(
+                    posicao,
+                    urlFinal
+            );
+
+            return;
+        }
+
+        // --------------------------------------------------------
+        // Mantém o fundo enquanto a imagem carrega.
+        // --------------------------------------------------------
+
+        imageView.setImageDrawable(
+                null
+        );
+
+        // --------------------------------------------------------
+        // Download em segundo plano.
+        // --------------------------------------------------------
+
+        executor.execute(
+                new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Bitmap bitmap =
+                                baixarImagem(
+                                        urlFinal
+                                );
+
+                        if (bitmap != null) {
+
+                            imageCache.put(
+                                    urlFinal,
+                                    bitmap
+                            );
+
+                            mainHandler.post(
+                                    new Runnable() {
+
+                                        @Override
+                                        public void run() {
+
+                                            imageView.setImageBitmap(
+                                                    bitmap
+                                            );
+
+                                            ImagemCarregada(
+                                                    posicao,
+                                                    urlFinal
+                                            );
+                                        }
+                                    }
+                            );
+
+                        } else {
+
+                            mainHandler.post(
+                                    new Runnable() {
+
+                                        @Override
+                                        public void run() {
+
+                                            ImagemFalhou(
+                                                    posicao,
+                                                    urlFinal
+                                            );
+                                        }
+                                    }
+                            );
+                        }
+                    }
+                }
+        );
+    }
+
+    // ============================================================
+    // BAIXA A IMAGEM
+    // ============================================================
+
+    private Bitmap baixarImagem(
+            String urlString
+    ) {
+
+        HttpURLConnection conexao =
+                null;
+
+        InputStream input =
+                null;
+
+        try {
+
+            URL url =
+                    new URL(
+                            urlString
+                    );
+
+            conexao =
+                    (HttpURLConnection)
+                            url.openConnection();
+
+            conexao.setConnectTimeout(
+                    10000
+            );
+
+            conexao.setReadTimeout(
+                    15000
+            );
+
+            conexao.setInstanceFollowRedirects(
+                    true
+            );
+
+            conexao.setRequestMethod(
+                    "GET"
+            );
+
+            conexao.setRequestProperty(
+                    "User-Agent",
+                    "Mozilla/5.0"
+            );
+
+            conexao.connect();
+
+            int codigo =
+                    conexao.getResponseCode();
+
+            if (codigo < 200 ||
+                    codigo >= 300) {
+
+                return null;
+            }
+
+            input =
+                    conexao.getInputStream();
+
+            return BitmapFactory.decodeStream(
+                    input
+            );
+
+        } catch (Exception e) {
+
+            return null;
+
+        } finally {
+
+            if (input != null) {
+
+                try {
+                    input.close();
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (conexao != null) {
+                conexao.disconnect();
+            }
+        }
+                                                    }
