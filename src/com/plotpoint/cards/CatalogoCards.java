@@ -1587,3 +1587,81 @@ public class CatalogoCards extends AndroidViewComponent {
                 url
         );
 }
+    // ============================================================
+    // OBTÉM TEXTO DE UMA POSIÇÃO DA LISTA
+    // ============================================================
+
+    private String obterTexto(
+            YailList lista,
+            int posicao
+    ) {
+
+        if (lista == null) {
+            return "";
+        }
+
+        if (lista.size() < posicao) {
+            return "";
+        }
+
+        Object valor =
+                lista.getObject(
+                        posicao
+                );
+
+        if (valor == null) {
+            return "";
+        }
+
+        return String.valueOf(
+                valor
+        );
+    }
+
+    // ============================================================
+    // CRIA FUNDO ARREDONDADO
+    // ============================================================
+
+    private GradientDrawable criarFundoArredondado(
+            int cor,
+            int raio
+    ) {
+
+        GradientDrawable fundo =
+                new GradientDrawable();
+
+        fundo.setColor(
+                cor
+        );
+
+        fundo.setCornerRadius(
+                dp(raio)
+        );
+
+        return fundo;
+    }
+
+    // ============================================================
+    // CONVERTE DP PARA PIXELS
+    // ============================================================
+
+    private int dp(
+            int valor
+    ) {
+
+        float densidade =
+                context
+                        .getResources()
+                        .getDisplayMetrics()
+                        .density;
+
+        return Math.round(
+                valor * densidade
+        );
+    }
+
+    // ============================================================
+    // FIM DA CLASSE
+    // ============================================================
+
+                        }
