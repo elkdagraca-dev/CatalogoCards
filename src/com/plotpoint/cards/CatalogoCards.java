@@ -343,3 +343,414 @@ public class CatalogoCards extends AndroidViewComponent {
 
         return containerView;
   }
+    // ============================================================
+    // DEFINIR LISTA
+    // ============================================================
+
+    @SimpleFunction(
+            description = "Define a lista de cartões."
+    )
+    public void DefinirLista(YailList lista) {
+
+        listaAtual = lista;
+
+        atualizarListaVisual();
+    }
+
+    // ============================================================
+    // LIMPAR
+    // ============================================================
+
+    @SimpleFunction(
+            description = "Remove todos os cartões."
+    )
+    public void Limpar() {
+
+        listaAtual = null;
+
+        if (listaCards != null) {
+            listaCards.removeAllViews();
+        }
+    }
+
+    // ============================================================
+    // ATUALIZAR
+    // ============================================================
+
+    @SimpleFunction(
+            description = "Atualiza os cartões usando a lista atual."
+    )
+    public void Atualizar() {
+
+        atualizarListaVisual();
+    }
+
+    // ============================================================
+    // ATUALIZA A INTERFACE
+    // ============================================================
+
+    private void atualizarListaVisual() {
+
+        if (listaCards == null) {
+            return;
+        }
+
+        listaCards.removeAllViews();
+
+        if (listaAtual == null) {
+            return;
+        }
+
+        int quantidade =
+                listaAtual.size();
+
+        if (quantidade <= 0) {
+            return;
+        }
+
+        // ========================================================
+        // MODO HORIZONTAL
+        // ========================================================
+
+        if ("HORIZONTAL".equals(orientacao)) {
+
+            for (int i = 1; i <= quantidade; i++) {
+
+                Object objeto =
+                        listaAtual.getObject(i);
+
+                if (!(objeto instanceof YailList)) {
+                    continue;
+                }
+
+                YailList item =
+                        (YailList) objeto;
+
+                View card =
+                        criarCard(
+                                item,
+                                i
+                        );
+
+                LinearLayout.LayoutParams params =
+                        new LinearLayout.LayoutParams(
+                                dp(larguraDoCard),
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                        );
+
+                params.setMargins(
+                        dp(espacamento / 2),
+                        0,
+                        dp(espacamento / 2),
+                        0
+                );
+
+                listaCards.addView(
+                        card,
+                        params
+                );
+            }
+
+            return;
+        }
+
+        // ========================================================
+        // MODO VERTICAL
+        // ========================================================
+
+        LinearLayout linhaAtual = null;
+
+        for (int i = 1; i <= quantidade; i++) {
+
+            // ----------------------------------------------------
+            // Cria uma nova linha a cada quantidade de colunas.
+            // ----------------------------------------------------
+
+            if ((i - 1) % colunas == 0) {
+
+                linhaAtual =
+                        new LinearLayout(
+                                context
+                        );
+
+                linhaAtual.setOrientation(
+                        LinearLayout.HORIZONTAL
+                );
+
+                linhaAtual.setGravity(
+                        Gravity.TOP
+                );
+
+                listaCards.addView(
+                        linhaAtual,
+                        new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                );
+            }
+
+            Object objeto =
+                    listaAtual.getObject(i);
+
+            if (!(objeto instanceof YailList)) {
+                continue;
+            }
+
+            YailList item =
+                    (YailList) objeto;
+
+            View card =
+                    criarCard(
+                            item,
+                            i
+                    );
+
+            // ----------------------------------------------------
+            // Cada cartão ocupa uma fração igual da linha.
+            // ----------------------------------------------------
+
+            LinearLayout.LayoutParams params =
+                    new LinearLayout.LayoutParams(
+                            0,
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            1f
+                    );
+
+            params.setMargins(
+                    dp(espacamento / 2),
+                    dp(espacamento / 2),
+                    dp(espacamento / 2),
+                    dp(espacamento / 2)
+            );
+
+            linhaAtual.addView(
+                    card,
+                    params
+            );
+        }
+    }
+
+    // ============================================================
+    // CRIA UM CARD
+    // ============================================================
+
+    private View criarCard(
+            YailList item,
+            final int posicao
+    ) {
+
+        String imagem =
+                obterTexto(
+                        item,
+                        1
+                );
+
+        String titulo =
+                obterTexto(
+                        item,
+                        2
+                );
+
+        String subtitulo =
+                obterTexto(
+                        item,
+                        3
+                );
+
+        // --------------------------------------------------------
+        // Container principal do cartão.
+        // --------------------------------------------------------
+
+        LinearLayout card =
+                new LinearLayout(
+                        context
+                );
+
+        card.setOrientation(
+                LinearLayout.VERTICAL
+        );
+
+        card.setGravity(
+                Gravity.TOP
+        );
+
+        card.setClickable(
+                true
+        );
+
+        card.setFocusable(
+                true
+        );
+
+        // --------------------------------------------------------
+        // Poster
+        // --------------------------------------------------------
+
+        AspectRatioImageView poster =
+                new AspectRatioImageView(
+                        context
+                );
+
+        poster.setRatio(
+                2f / 3f
+        );
+
+        poster.setScaleType(
+                ImageView.ScaleType.CENTER_CROP
+        );
+
+        poster.setBackground(
+                criarFundoArredondado(
+                        Color.rgb(
+                                24,
+                                24,
+                                24
+                        ),
+                        raioDosPosters
+                )
+        );
+
+        if (Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.LOLLIPOP) {
+
+            poster.setClipToOutline(
+                    true
+            );
+        }
+
+        LinearLayout.LayoutParams posterParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+        card.addView(
+                poster,
+                posterParams
+        );
+
+        // --------------------------------------------------------
+        // Título
+        // --------------------------------------------------------
+
+        TextView textoTitulo =
+                criarTexto();
+
+        aplicarHTML(
+                textoTitulo,
+                titulo
+        );
+
+        configurarTexto(
+                textoTitulo,
+                modoTitulo,
+                maxLinhasTitulo
+        );
+
+        LinearLayout.LayoutParams tituloParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+        tituloParams.topMargin =
+                dp(6);
+
+        card.addView(
+                textoTitulo,
+                tituloParams
+        );
+
+        // --------------------------------------------------------
+        // Subtítulo
+        // --------------------------------------------------------
+
+        TextView textoSubtitulo =
+                criarTexto();
+
+        textoSubtitulo.setTextSize(
+                10
+        );
+
+        aplicarHTML(
+                textoSubtitulo,
+                subtitulo
+        );
+
+        configurarTexto(
+                textoSubtitulo,
+                modoSubtitulo,
+                maxLinhasSubtitulo
+        );
+
+        LinearLayout.LayoutParams subtituloParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+        subtituloParams.topMargin =
+                dp(3);
+
+        card.addView(
+                textoSubtitulo,
+                subtituloParams
+        );
+
+        // --------------------------------------------------------
+        // Guarda os dados originais para os eventos.
+        // --------------------------------------------------------
+
+        final String imagemFinal =
+                imagem;
+
+        final String tituloFinal =
+                titulo;
+
+        final String subtituloFinal =
+                subtitulo;
+
+        // --------------------------------------------------------
+        // Clique curto
+        // --------------------------------------------------------
+
+        card.setOnClickListener(
+                v -> CartaoClicado(
+                        posicao,
+                        imagemFinal,
+                        tituloFinal,
+                        subtituloFinal
+                )
+        );
+
+        // --------------------------------------------------------
+        // Clique longo
+        // --------------------------------------------------------
+
+        card.setOnLongClickListener(
+                v -> {
+
+                    CartaoLongoClicado(
+                            posicao,
+                            imagemFinal,
+                            tituloFinal,
+                            subtituloFinal
+                    );
+
+                    return true;
+                }
+        );
+
+        // --------------------------------------------------------
+        // Carrega a imagem em segundo plano.
+        // --------------------------------------------------------
+
+        carregarImagem(
+                poster,
+                imagem,
+                posicao
+        );
+
+        return card;
+                        }
