@@ -1,6 +1,8 @@
 ---
 name: CatalogoCards
-version: 1
+version:
+  number: 1
+  name: '1.0'
 authors:
   - Elk da Graça Pequenino
 description: Componente nativo para criação de cartões com imagem, título e subtítulo HTML.
