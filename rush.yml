@@ -5,3 +5,6 @@ authors:
   - Elk da Graça Pequenino
 description: Componente nativo para criação de cartões com imagem, título e subtítulo HTML.
 min_sdk: 21
+
+assets:
+  icon: icon.png
