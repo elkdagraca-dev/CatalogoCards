@@ -1147,4 +1147,284 @@ public class CatalogoCards extends AndroidViewComponent {
                 conexao.disconnect();
             }
         }
-                                                    }
+            // ============================================================
+    // ORIENTAÇÃO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_CHOICES,
+            defaultValue = "VERTICAL",
+            editorArgs = {
+                    "VERTICAL",
+                    "HORIZONTAL"
+            }
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Define a orientação dos cartões."
+    )
+    public void Orientacao(
+            String valor
+    ) {
+
+        if (valor == null) {
+            return;
+        }
+
+        if ("HORIZONTAL".equalsIgnoreCase(
+                valor
+        )) {
+
+            orientacao = "HORIZONTAL";
+
+        } else {
+
+            orientacao = "VERTICAL";
+        }
+
+        criarScroll();
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Retorna a orientação atual."
+    )
+    public String Orientacao() {
+
+        return orientacao;
+    }
+
+    // ============================================================
+    // COLUNAS
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "3"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Quantidade de colunas no modo vertical."
+    )
+    public void Colunas(
+            int valor
+    ) {
+
+        if (valor < 1) {
+            valor = 1;
+        }
+
+        colunas = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int Colunas() {
+
+        return colunas;
+    }
+
+    // ============================================================
+    // ESPAÇAMENTO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "10"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Espaçamento entre os cartões em dp."
+    )
+    public void Espacamento(
+            int valor
+    ) {
+
+        if (valor < 0) {
+            valor = 0;
+        }
+
+        espacamento = valor;
+
+        criarScroll();
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int Espacamento() {
+
+        return espacamento;
+    }
+
+    // ============================================================
+    // LARGURA DO CARD
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "130"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Largura dos cartões horizontais em dp."
+    )
+    public void LarguraDoCard(
+            int valor
+    ) {
+
+        if (valor < 40) {
+            valor = 40;
+        }
+
+        larguraDoCard = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int LarguraDoCard() {
+
+        return larguraDoCard;
+    }
+
+    // ============================================================
+    // RAIO DOS POSTERS
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "8"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Raio dos cantos dos posters em dp."
+    )
+    public void RaioDosPosters(
+            int valor
+    ) {
+
+        if (valor < 0) {
+            valor = 0;
+        }
+
+        raioDosPosters = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int RaioDosPosters() {
+
+        return raioDosPosters;
+    }
+
+    // ============================================================
+    // MODO DO TÍTULO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_CHOICES,
+            defaultValue = "RETICENCIAS",
+            editorArgs = {
+                    "RETICENCIAS",
+                    "QUEBRAR_LINHA"
+            }
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Define como o título será exibido."
+    )
+    public void ModoDoTitulo(
+            String valor
+    ) {
+
+        if (valor == null) {
+            return;
+        }
+
+        if ("QUEBRAR_LINHA".equalsIgnoreCase(
+                valor
+        )) {
+
+            modoTitulo = "QUEBRAR_LINHA";
+
+        } else {
+
+            modoTitulo = "RETICENCIAS";
+        }
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public String ModoDoTitulo() {
+
+        return modoTitulo;
+    }
+
+    // ============================================================
+    // MODO DO SUBTÍTULO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_CHOICES,
+            defaultValue = "RETICENCIAS",
+            editorArgs = {
+                    "RETICENCIAS",
+                    "QUEBRAR_LINHA"
+            }
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Define como o subtítulo será exibido."
+    )
+    public void ModoDoSubtitulo(
+            String valor
+    ) {
+
+        if (valor == null) {
+            return;
+        }
+
+        if ("QUEBRAR_LINHA".equalsIgnoreCase(
+                valor
+        )) {
+
+            modoSubtitulo = "QUEBRAR_LINHA";
+
+        } else {
+
+            modoSubtitulo = "RETICENCIAS";
+        }
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public String ModoDoSubtitulo() {
+
+        return modoSubtitulo;
+    }                                            }
