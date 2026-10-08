@@ -737,5 +737,209 @@ public class CatalogoCards extends AndroidViewComponent {
     )
     public void ModoDoTitulo(String valor) {
 
+                if (valor == null) {
+            valor = "RETICENCIAS";
+        }
+
+        valor = valor.toUpperCase();
+
+        if (!valor.equals("QUEBRAR_LINHA")) {
+            valor = "RETICENCIAS";
+        }
+
+        modoTitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Define como o subtítulo será exibido."
+    )
+    @DesignerProperty(
+            editorType = PropertyTypeConstants.PROPERTY_TYPE_STRING,
+            defaultValue = "RETICENCIAS"
+    )
+    public void ModoDoSubtitulo(String valor) {
+
         if (valor == null) {
-            valor = "RETI
+            valor = "RETICENCIAS";
+        }
+
+        valor = valor.toUpperCase();
+
+        if (!valor.equals("QUEBRAR_LINHA")) {
+            valor = "RETICENCIAS";
+        }
+
+        modoSubtitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Número máximo de linhas do título."
+    )
+    @DesignerProperty(
+            editorType = PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "1"
+    )
+    public void MaxLinhasTitulo(int valor) {
+
+        if (valor < 1) {
+            valor = 1;
+        }
+
+        maxLinhasTitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Número máximo de linhas do subtítulo."
+    )
+    @DesignerProperty(
+            editorType = PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "1"
+    )
+    public void MaxLinhasSubtitulo(int valor) {
+
+        if (valor < 1) {
+            valor = 1;
+        }
+
+        maxLinhasSubtitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    // ============================================================
+    // EVENTOS
+    // ============================================================
+
+    @SimpleEvent(
+            description = "Disparado quando um cartão recebe um clique curto."
+    )
+    public void CartaoClicado(
+            int posicao,
+            String imagem,
+            String titulo,
+            String subtitulo
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "CartaoClicado",
+                posicao,
+                imagem,
+                titulo,
+                subtitulo
+        );
+    }
+
+    @SimpleEvent(
+            description = "Disparado quando um cartão recebe um clique longo."
+    )
+    public void CartaoLongoClicado(
+            int posicao,
+            String imagem,
+            String titulo,
+            String subtitulo
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "CartaoLongoClicado",
+                posicao,
+                imagem,
+                titulo,
+                subtitulo
+        );
+    }
+
+    @SimpleEvent(
+            description = "Disparado quando uma imagem é carregada."
+    )
+    public void ImagemCarregada(
+            int posicao,
+            String url
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "ImagemCarregada",
+                posicao,
+                url
+        );
+    }
+
+    @SimpleEvent(
+            description = "Disparado quando uma imagem falha ao carregar."
+    )
+    public void ImagemFalhou(
+            int posicao,
+            String url
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "ImagemFalhou",
+                posicao,
+                url
+        );
+    }
+
+    // ============================================================
+    // UTILITÁRIOS
+    // ============================================================
+
+    private String obterTexto(
+            YailList item,
+            int posicao
+    ) {
+
+        if (item == null ||
+                item.size() < posicao) {
+
+            return "";
+        }
+
+        Object valor = item.getObject(posicao);
+
+        if (valor == null) {
+            return "";
+        }
+
+        return String.valueOf(valor);
+    }
+
+    private GradientDrawable criarFundoArredondado(
+            int cor,
+            int raio
+    ) {
+
+        GradientDrawable drawable =
+                new GradientDrawable();
+
+        drawable.setColor(cor);
+        drawable.setCornerRadius(
+                dp(raio)
+        );
+
+        return drawable;
+    }
+
+    private int dp(int valor) {
+
+        float densidade =
+                context.getResources()
+                        .getDisplayMetrics()
+                        .density;
+
+        return Math.round(
+                valor * densidade
+        );
+    }
+        }
