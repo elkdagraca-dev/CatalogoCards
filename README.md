@@ -35,5 +35,3 @@ Exemplo:
   ]
 ]
 
-Autor
-Elk da Graça Pequenino
