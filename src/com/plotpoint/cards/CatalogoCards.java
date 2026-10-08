@@ -754,3 +754,194 @@ public class CatalogoCards extends AndroidViewComponent {
 
         return card;
                         }
+    // ============================================================
+    // CRIA TEXTVIEW
+    // ============================================================
+
+    private TextView criarTexto() {
+
+        TextView texto =
+                new TextView(
+                        context
+                );
+
+        texto.setTextColor(
+                Color.WHITE
+        );
+
+        texto.setTextSize(
+                13
+        );
+
+        texto.setGravity(
+                Gravity.START
+        );
+
+        texto.setIncludeFontPadding(
+                true
+        );
+
+        texto.setPadding(
+                0,
+                0,
+                0,
+                0
+        );
+
+        return texto;
+    }
+
+    // ============================================================
+    // APLICA HTML AO TEXTO
+    // ============================================================
+
+    private void aplicarHTML(
+            TextView texto,
+            String conteudo
+    ) {
+
+        if (conteudo == null) {
+            conteudo = "";
+        }
+
+        if (Build.VERSION.SDK_INT >=
+                Build.VERSION_CODES.N) {
+
+            texto.setText(
+                    Html.fromHtml(
+                            conteudo,
+                            Html.FROM_HTML_MODE_LEGACY
+                    )
+            );
+
+        } else {
+
+            texto.setText(
+                    Html.fromHtml(
+                            conteudo
+                    )
+            );
+        }
+    }
+
+    // ============================================================
+    // CONFIGURAÇÃO DO TÍTULO/SUBTÍTULO
+    // ============================================================
+
+    private void configurarTexto(
+            TextView texto,
+            String modo,
+            int maxLinhas
+    ) {
+
+        if (maxLinhas < 1) {
+            maxLinhas = 1;
+        }
+
+        // ========================================================
+        // RETICÊNCIAS
+        // ========================================================
+
+        if ("RETICENCIAS".equals(
+                modo
+        )) {
+
+            texto.setSingleLine(
+                    maxLinhas == 1
+            );
+
+            texto.setMaxLines(
+                    maxLinhas
+            );
+
+            texto.setEllipsize(
+                    TextUtils.TruncateAt.END
+            );
+
+        }
+
+        // ========================================================
+        // QUEBRAR LINHA
+        // ========================================================
+
+        else {
+
+            texto.setSingleLine(
+                    false
+            );
+
+            texto.setMaxLines(
+                    maxLinhas
+            );
+
+            texto.setEllipsize(
+                    null
+            );
+        }
+    }
+
+    // ============================================================
+    // IMAGEVIEW COM PROPORÇÃO FIXA
+    // ============================================================
+
+    private static class AspectRatioImageView
+            extends ImageView {
+
+        private float ratio =
+                2f / 3f;
+
+        public AspectRatioImageView(
+                Context context
+        ) {
+
+            super(context);
+        }
+
+        // --------------------------------------------------------
+        // Define a proporção.
+        // --------------------------------------------------------
+
+        public void setRatio(
+                float ratio
+        ) {
+
+            if (ratio > 0) {
+                this.ratio = ratio;
+            }
+
+            requestLayout();
+        }
+
+        // --------------------------------------------------------
+        // Mantém a proporção da imagem.
+        // --------------------------------------------------------
+
+        @Override
+        protected void onMeasure(
+                int widthMeasureSpec,
+                int heightMeasureSpec
+        ) {
+
+            super.onMeasure(
+                    widthMeasureSpec,
+                    heightMeasureSpec
+            );
+
+            int largura =
+                    getMeasuredWidth();
+
+            if (largura > 0 && ratio > 0) {
+
+                int altura =
+                        Math.round(
+                                largura / ratio
+                        );
+
+                setMeasuredDimension(
+                        largura,
+                        altura
+                );
+            }
+        }
+                    }
+        
