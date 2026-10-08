@@ -1,0 +1,36 @@
+name: Build CatalogoCards
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Instalar Rush
+        run: |
+          curl -L https://github.com/shreyashsaitwal/Rush/releases/latest/download/rush-linux-x86_64 -o rush
+          chmod +x rush
+          sudo mv rush /usr/local/bin/rush
+
+      - name: Compilar extensão
+        run: rush build
+
+      - name: Guardar arquivo AIX
+        uses: actions/upload-artifact@v4
+        with:
+          name: CatalogoCards-AIX
+          path: "**/*.aix"
