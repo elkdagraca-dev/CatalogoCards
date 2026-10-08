@@ -1428,3 +1428,162 @@ public class CatalogoCards extends AndroidViewComponent {
 
         return modoSubtitulo;
     }                                            }
+    // ============================================================
+    // MÁXIMO DE LINHAS DO TÍTULO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "1"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Quantidade máxima de linhas do título."
+    )
+    public void MaxLinhasTitulo(
+            int valor
+    ) {
+
+        if (valor < 1) {
+            valor = 1;
+        }
+
+        maxLinhasTitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int MaxLinhasTitulo() {
+
+        return maxLinhasTitulo;
+    }
+
+    // ============================================================
+    // MÁXIMO DE LINHAS DO SUBTÍTULO
+    // ============================================================
+
+    @DesignerProperty(
+            editorType =
+                    PropertyTypeConstants.PROPERTY_TYPE_INTEGER,
+            defaultValue = "1"
+    )
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE,
+            description = "Quantidade máxima de linhas do subtítulo."
+    )
+    public void MaxLinhasSubtitulo(
+            int valor
+    ) {
+
+        if (valor < 1) {
+            valor = 1;
+        }
+
+        maxLinhasSubtitulo = valor;
+
+        atualizarListaVisual();
+    }
+
+    @SimpleProperty(
+            category = PropertyCategory.APPEARANCE
+    )
+    public int MaxLinhasSubtitulo() {
+
+        return maxLinhasSubtitulo;
+    }
+
+    // ============================================================
+    // EVENTO: CARTÃO CLICADO
+    // ============================================================
+
+    @SimpleEvent(
+            description =
+                    "Disparado quando um cartão é clicado."
+    )
+    public void CartaoClicado(
+            int posicao,
+            String imagem,
+            String titulo,
+            String subtitulo
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "CartaoClicado",
+                posicao,
+                imagem,
+                titulo,
+                subtitulo
+        );
+    }
+
+    // ============================================================
+    // EVENTO: CARTÃO CLICADO LONGAMENTE
+    // ============================================================
+
+    @SimpleEvent(
+            description =
+                    "Disparado quando um cartão é pressionado longamente."
+    )
+    public void CartaoLongoClicado(
+            int posicao,
+            String imagem,
+            String titulo,
+            String subtitulo
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "CartaoLongoClicado",
+                posicao,
+                imagem,
+                titulo,
+                subtitulo
+        );
+    }
+
+    // ============================================================
+    // EVENTO: IMAGEM CARREGADA
+    // ============================================================
+
+    @SimpleEvent(
+            description =
+                    "Disparado quando uma imagem é carregada."
+    )
+    public void ImagemCarregada(
+            int posicao,
+            String url
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "ImagemCarregada",
+                posicao,
+                url
+        );
+    }
+
+    // ============================================================
+    // EVENTO: FALHA AO CARREGAR IMAGEM
+    // ============================================================
+
+    @SimpleEvent(
+            description =
+                    "Disparado quando uma imagem não pode ser carregada."
+    )
+    public void ImagemFalhou(
+            int posicao,
+            String url
+    ) {
+
+        EventDispatcher.dispatchEvent(
+                this,
+                "ImagemFalhou",
+                posicao,
+                url
+        );
+}
