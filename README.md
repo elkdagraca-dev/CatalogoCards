@@ -34,4 +34,3 @@ Exemplo:
     "<font color='#2196F3'>SÉRIE</font> | 9.1 | 2008"
   ]
 ]
-
